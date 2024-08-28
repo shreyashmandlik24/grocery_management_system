@@ -1,193 +1,99 @@
-import axios from "axios";
-import { createUrl,log } from "../utils/utils";
+import axios from 'axios';
+const BASE_URL = 'http://localhost:8080';
+
+// Function to create URL if needed
+const createUrl = (path) => `http://localhost:8080${path}`;
 
 export async function getVendorList() {
-    const url = createUrl('/vendor')
+    const url = createUrl('/admin/getVendors'); // Updated URL for the request
 
     try {
-        // get the current user's token from session storage
-      //  const { token } = sessionStorage
-        console.log("in getVendorList............")
-        // create a header to send the token
-        const header = {
-          headers: {
-            //token,
-          },
-        }
+        console.log('Fetching vendor list...');
 
-        const response = await axios.get(url, header)
-        log(response.data)
-        return response
-}catch (ex){
-    log(ex)
-    return null
-}
-}
+        // Make the GET request without token in headers
+        const response = await axios.get(url);
 
-export async function registerVendor(fname,lname,email,password,mobile){
-  const url = createUrl('/vendor')
-  const body = {
-    fname,
-    lname,
-    email,
-    password,
-    mobile,
-  }
+        // Log response data
+        console.log(response.data);
 
-  try{
-    const response = await axios.post(url,body)
-    console.log(response)
-    return response
-  } catch(ex){
-    console.log(ex)
-    return null
-  }
-}
-
-export async function getVendorProductListByVendorId(id)
-{
-    console.log("in getVendorProductListByVendorId"+id)
-    const url= createUrl('/vendorProducts/'+ id )
-
-    try {
-        console.log("in get VendorProductList By Vendor Id............")
-
-        const header = {
-            headers: {
-              //token,
-            },
-          }
-
-          const response = await axios.get(url, header)
-          log("in log............"+response.data)
-          log("in log............"+response)
-
-          return response
-
-    } catch (error) {
-        
-        log(error)
-        return null
-    }
-}
-
-export async function addVendorProducts(productName,productDesc,productMfgDate,productExpDate,
-    productPrice,productQuantity,pmanufacturer,categoryId,vendorId,subCatId){
-    const url = createUrl('/vendorProducts')
-    try {
-        const body ={
-            productName,productDesc,productMfgDate,productExpDate,
-                productPrice,productQuantity,pmanufacturer,categoryId,vendorId,subCatId
-        }
-
-        const response = await axios.post(url,body)
-        return response
-        
-    } catch (error) {
-        log(error)
-        return null
-    }
-}
-
-export async function getVenProdctById(productId){
-    const url = createUrl('/vendorProducts/getProd/' +productId)
-
-    try {
-      const header = {
-        headers:{
-          //token
-        },
-      }
-      const response = await axios.get(url,header)
-      return response
-      
+        return response.data;
     } catch (ex) {
-        log(ex)
+        // Log any errors
+        console.error(ex);
+
         return null;
     }
 }
 
-export async function updateVendorProduct(productId,productName,productDesc,productMfgDate,productExpDate,
-  productPrice,productQuantity,pmanufacturer,categoryId,vendorId,subCatId){
+// Delete a vendor by ID
+export async function deleteVendor(id) {
+    const url = createUrl(`/admin/${id}`); // Ensure this URL is correct
 
-    const url = createUrl('/vendorProducts/' + productId)
-    const body = { productName,productDesc,productMfgDate,productExpDate,
-      productPrice,productQuantity,pmanufacturer,categoryId,vendorId,subCatId}
-
-
-      try {
-        // wait till axios is making the api call and getting response from server
-       const response = await axios.put(url, body)
-       log(response.data)
-       console.log( "in response of update User "+response)
-   
-       // return response.data
-       return response
-     } catch (ex) {
-       log(ex)
-       return null
-     }
-
-  }
-
-  export async function vendorLogin(email, password) {
-    const url = createUrl('/vendor/login')
-    const body = {
-      email,
-      password
-    }
-  
-    // wait till axios is making the api call and getting response from server
     try {
-      
-      const response = await axios.post(url, body)
-      
-      log(response.data)
-      console.log( "in response vendorlogin "+response)
-      console.log( response.data.email)
-      // return response.data
-      return response
-    } catch (ex) {
-      console.log("error occured  in ven.............")
-      log(ex)
-      return null
-    }
-  }
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import axios from "axios";
-// import { createUrl } from "../utils/utils";
-
-// export async function getVendorById(vendorId){
-//     const url = createUrl("/vendor/1")
-//     try {
-//         console.log("vendorId in get of vendor...."+ vendorId)
-//         const header={
-//             headers: {
-//                 //token
-//             },
-//         }
-//         const response= await axios.get(url,header)
-//         return response;
-//     } catch (ex) {
-//         console.log(ex)
-//         return null
+        const response = await axios.delete(url, {
+            timeout: 10000, // Set timeout to 10 seconds
+        });
         
+        if (response.status === 200) {
+            console.log(`Vendor with ID ${id} deleted successfully`);
+        } else {
+            console.warn(`Unexpected response status: ${response.status}`);
+        }
+    } catch (ex) {
+        if (ex.response) {
+            // Server responded with a status other than 2xx
+            console.error(`Server responded with status ${ex.response.status}`);
+        } else if (ex.request) {
+            // The request was made but no response was received
+            console.error('No response received from server');
+        } else {
+            // Something happened in setting up the request
+            console.error('Error setting up request:', ex.message);
+        }
+        throw ex; // Rethrow the exception to handle it in the component
+    }
+}
+
+const addVendor = async (vendorData) => {
+    try {
+      // POST request to the /addVendor endpoint
+      const response = await axios.post(`${BASE_URL}/admin/addVendor`, vendorData, {
+        headers: {
+          'Content-Type': 'application/json',
+          // Include any other necessary headers here
+        }
+      });
+  
+      // Handle the response if needed
+      console.log('Vendor added successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      // Handle errors
+      console.error('Error adding vendor:', error);
+      throw error;
+    }
+  };
+  
+  export default addVendor;
+
+// //addvendor
+// export async function addVendor() {
+//     const url = createUrl('/admin/addVendor'); // Updated URL for the request
+
+//     try {
+//         console.log('Fetching vendor list...');
+
+//         // Make the GET request without token in headers
+//         const response = await axios.post(url);
+
+//         // Log response data
+//         console.log(response.data);
+
+//         return response.data;
+//     } catch (ex) {
+//         // Log any errors
+//         console.error(ex);
+
+//         return null;
 //     }
 // }

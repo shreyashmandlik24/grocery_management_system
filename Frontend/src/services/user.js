@@ -1,120 +1,72 @@
-import axios from 'axios'
-import { createUrl, log } from '../utils/utils'
+// import axios from 'axios'
+// import config from '../config'
 
+// export async function register(firstName, lastName, email, phone, password) {
+//   // body parameters
+//   const body = {
+//     firstName,
+//     lastName,
+//     email,
+//     phone,
+//     password,
+//   }
 
+//   // make API call
+//   const response = await axios.post("http://localhost:8080/users/register", body)
 
+//   // read JSON data (response)
+//   return response.data
+// }
 
-//GET:get userById
-export async function getCustomerById(customerId){
-  // debugger
-  const url =createUrl('/Customer/'+customerId)
-  
-  try{
-    // get the current user's token from session storage
-   //  const { token } = sessionStorage
-   console.log("in GET of getCustomerById...."+ customerId)
-   // create a header to send the token
-    const header = {
-      headers: {
-        //token,
-      },
+// export async function login(email, password) {
+//   // body parameters
+//   const body = {
+//     email,
+//     password,
+//   }
+
+//   // make API call
+//   const response = await axios.post("http://localhost:8080/users/login", body)
+
+//   // read JSON data (response)
+//   return response.data
+// }
+
+// export const getUserList = async () => {
+//   try {
+//     const response = await axios.get('http://localhost:8080/allUsers'); // Adjust the URL based on your API endpoint
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching user list:', error);
+//     throw error;
+//   }
+// };
+// services/user.js
+
+// services/user.js
+import axios from 'axios';
+
+// Function to create URL if needed
+const createUrl = (path) => `http://localhost:8080${path}`;
+
+export async function getUserList() {
+    const url = createUrl('/admin/getAllUsers'); // Updated URL for the request
+
+    try {
+        console.log('Fetching customer list...');
+
+        // Make the GET request without token in headers
+        const response = await axios.get(url);
+
+        // Log response data
+        console.log(response.data);
+
+        return response.data;
+    } catch (ex) {
+        // Log any errors
+        console.error(ex);
+
+        return null;
     }
-  //make api call using the token in the header
- const response = await axios.get(url, header) 
- console.log("response in get customerById.....")
-  console.log(response)
-  // debugger  
-  return response;
-
-  } catch (ex) {
-    log(ex)
-    return null
-  }
-
 }
 
-
-
-export async function updateUser(customerId,firstName,lastName,email,password,phone)
-{
-  const url =createUrl('/Customer/'+customerId)
-  console.log("url ....."+ url)
-  const body ={customerId,firstName,lastName,email,password,phone}
-
-  console.log("body====")
-  console.log(body)
-
-  try {
-     // wait till axios is making the api call and getting response from server
-    const response = await axios.put(url, body)
-    log(response.data)
-    console.log( "in response of update User "+response)
-
-    // return response.data
-    return response
-  } catch (ex) {
-    log(ex)
-    return null
-  }
-  
-}
-
-
-
-
-
-
-
-
-
-export async function registerUser(
-  firstName,
-  lastName,
-  email,
-  password,
-  phone
-) {
-  const url = createUrl('/Customer')
-  const body = {
-    firstName,
-    lastName,
-    email,
-    password,
-    phone,
-  }
-
-  // wait till axios is making the api call and getting response from server
-  try {
-    const response = await axios.post(url, body)
-    log(response)
-
-    console.log("in user for register ...")
-    console.log(response)    
-    // return response.data
-    return response
-  } catch (ex) {
-    log(ex)
-    return null
-  }
-}
-
-export async function loginUser(email, password) {
-  const url = createUrl('/Customer/login')
-  const body = {
-    email,
-    password,
-  }
-
-  // wait till axios is making the api call and getting response from server
-  try {
-    const response = await axios.post(url, body)
-    log(response.data)
-    console.log( "in response of loginUser "+response)
-    console.log( response.data.email)
-    // return response.data
-    return response
-  } catch (ex) {
-    log(ex)
-    return null
-  }
-}

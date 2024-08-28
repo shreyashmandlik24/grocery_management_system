@@ -3,33 +3,27 @@
 
 
 import axios from 'axios'
-import { createUrl, log } from '../utils/utils'
+// import { createUrl, log } from '../utils/utils'
+// import config from '../config'
 
+export async function getAllUsers(){
+  const url = createUrl('/orderDetailscontroller')
 
-
-
-
-export async function adminLogin(email, password) {
-  const url = createUrl('/Admin/login')
-  const body = {
-    email,
-    password,
-  }
-
-  // wait till axios is making the api call and getting response from server
   try {
-    debugger
-    const response = await axios.post(url, body)
-    debugger
-    log(response.data)
-    console.log( "in response vendorlogin "+response)
-    console.log( response.data.email)
-    // return response.data
-    return response
+      const header = {
+          headers: {
+            //token,
+          },
+        }
+        debugger
+      // const response =await axios.get(url,header)
+      const response = await axios.get(url, header) 
+
+      debugger
+      return response
   } catch (ex) {
-    console.log("error occured")
-    log(ex)
-    return null
+      log(ex)
+      return null
   }
 }
 

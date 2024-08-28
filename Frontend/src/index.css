@@ -11,28 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-
-/* Regular button style */
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-}
-
-/* Button style on hover */
-.btn-secondary:hover {
-  background-color: #343a40; /* Change color on hover */
-  color: white;
-}
-
-/* In your CSS or a stylesheet */
-.navbar-nav .nav-item .nav-link {
-  transition: transform 0.2s ease-in-out; /* Add a smooth transition */
-}
-
-.navbar-nav .nav-item .nav-link:hover {
-  transform: scale(1.1); /* Apply zoom effect on hover */
-}
-
-/* copied from aniket */

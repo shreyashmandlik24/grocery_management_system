@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+/* App.css */
+.brand-size {
+  font-size: 1.75rem; /* Adjust font size as needed */
+}
+
+.navbar-nav .nav-item.ml-auto {
+  margin-left: auto; /* Pushes Cart link to the right */
+}

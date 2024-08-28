@@ -1,2 +1,0 @@
-INDEX VERSION 1.131+D:\Project\groceryManagement-master (1)\groceryManagement-master\Backend\.metadata\.plugins\org.eclipse.jdt.core
-1865797976.index
